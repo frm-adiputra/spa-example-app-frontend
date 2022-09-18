@@ -10,6 +10,11 @@
           Welcome to the Vuetify + Nuxt.js template
         </v-card-title>
         <v-card-text>
+          <ul>
+            <li v-for="m in mataKuliahs" :key="m.id">
+              {{ m.kode }} - {{ m.nama }}
+            </li>
+          </ul>
           <p>
             Vuetify is a progressive Material Design component framework for
             Vue.js. It was designed to empower developers to create amazing
@@ -73,7 +78,9 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
+          <v-btn color="primary" href="http://localhost:3030/oauth/google">
+            Continue
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -81,7 +88,23 @@
 </template>
 
 <script>
+import { mapGetters, mapActions } from 'vuex'
+
 export default {
   name: 'IndexPage',
+  computed: {
+    ...mapGetters('mata-kuliahs', {
+      findMataKuliahsInStore: 'find',
+    }),
+    mataKuliahs() {
+      return this.findMataKuliahsInStore({}).data
+    },
+  },
+  created() {
+    this.findMataKuliahs()
+  },
+  methods: {
+    ...mapActions('mata-kuliahs', { findMataKuliahs: 'find' }),
+  },
 }
 </script>
