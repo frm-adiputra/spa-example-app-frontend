@@ -1,5 +1,27 @@
 # app-frontend
 
+## Setup after Nuxt generate app
+
+### Using material design icons JS SVG
+
+This is needed to make bundle size much smaller.
+
+Install dependency
+
+```shell
+npm install @mdi/js -D
+```
+
+Edit `nuxt.config.js`, include this options in `vuetify` options
+
+```js
+defaultAssets: {
+  icons: 'mdiSvg'
+}
+```
+
+Use icons as documented [here](https://vuetifyjs.com/en/features/icon-fonts/#material-design-icons-js-svg)
+
 ## Build Setup
 
 ```bash
