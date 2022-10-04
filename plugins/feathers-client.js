@@ -5,7 +5,7 @@ import auth from '@feathersjs/authentication-client'
 // import io from 'socket.io-client'
 import rest from '@feathersjs/rest-client'
 // import { iff, discard } from 'feathers-hooks-common'
-import feathersVuex from 'feathers-vuex'
+import feathersVuex, { initAuth } from 'feathers-vuex'
 
 // const socket = io('http://localhost:3030', { transports: ['websocket'] })
 const restClient = rest('http://localhost:3030')
@@ -34,4 +34,11 @@ const { makeServicePlugin, makeAuthPlugin, BaseModel, models, FeathersVuex } =
     whitelist: ['$regex', '$options'],
   })
 
-export { makeAuthPlugin, makeServicePlugin, BaseModel, models, FeathersVuex }
+export {
+  makeAuthPlugin,
+  makeServicePlugin,
+  initAuth,
+  BaseModel,
+  models,
+  FeathersVuex,
+}

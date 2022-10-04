@@ -80,4 +80,8 @@ export default {
   build: {
     transpile: ['feathers-vuex'],
   },
+
+  router: {
+    middleware: ['auth'],
+  },
 }
