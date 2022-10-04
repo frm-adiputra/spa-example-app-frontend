@@ -1,4 +1,4 @@
-import {
+import client, {
   makeAuthPlugin,
   initAuth,
   // models
@@ -7,6 +7,26 @@ const auth = makeAuthPlugin({
   userService: 'users',
   state: {
     publicPages: ['login', 'signup'],
+  },
+  actions: {
+    authenticate({ commit, dispatch }, dataOrArray) {
+      return client.authentication
+        .getAccessToken()
+        .then((accessToken) => {
+          // console.log('accessToken-show', accessToken)
+          client.authentication.authenticated = true
+          client.emit('login', { accessToken })
+          client.emit('authenticated', { accessToken })
+          client.authentication.setAccessToken(accessToken).then(() => {})
+          return dispatch('responseHandler', { accessToken })
+        })
+        .catch((error) => {
+          // console.error(error)
+          commit('setAuthenticateError', error)
+          commit('unsetAuthenticatePending')
+          return Promise.reject(error)
+        })
+    },
   },
 })
 

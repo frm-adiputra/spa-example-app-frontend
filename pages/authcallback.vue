@@ -2,9 +2,9 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <v-card>
-        <v-card-title class="headline"> Login </v-card-title>
+        <v-card-title class="headline"> Auth Callback </v-card-title>
         <v-card-text>
-          <p>Please login</p>
+          <p>Auth Callback</p>
         </v-card-text>
         <v-card-actions>
           <v-spacer />
@@ -19,12 +19,34 @@
 </template>
 
 <script>
+// import client from '~/plugins/feathers-client'
+
 export default {
-  name: 'LoginPage',
+  name: 'AuthCallbackPage',
+
+  mounted() {
+    // client.authentication
+    //   .getAccessToken()
+    //   .then((resp) => {
+    //     console.log('access_token', resp)
+    //   })
+    //   .catch((e) => {
+    //     console.error(e)
+    //   })
+    this.$store.dispatch('auth/authenticate')
+  },
 
   methods: {
     loginVuex() {
       this.$store.dispatch('auth/authenticate', { strategy: 'google' })
+      // client
+      //   .reAuthenticate()
+      //   .then(() => {
+      //     console.log('reauthenticated')
+      //   })
+      //   .catch((e) => {
+      //     console.error(e)
+      //   })
     },
   },
 }
