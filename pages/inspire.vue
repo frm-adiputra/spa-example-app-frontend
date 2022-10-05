@@ -19,6 +19,9 @@ import feathersClient from '~/plugins/feathers'
 
 export default {
   name: 'InspirePage',
+  meta: {
+    title: 'Inspire',
+  },
   created() {
     feathersClient
       .service('mata-kuliahs')

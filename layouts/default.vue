@@ -1,10 +1,12 @@
 <template>
-  <v-app dark>
+  <v-app>
     <v-navigation-drawer
       v-model="drawer"
+      class="indigo accent4"
       :mini-variant="miniVariant"
       :clipped="clipped"
       fixed
+      dark
       app
     >
       <v-list>
@@ -24,9 +26,15 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar :clipped-left="clipped" fixed app>
+    <v-app-bar
+      color="white"
+      elevate-on-scroll
+      :clipped-left="clipped"
+      fixed
+      app
+    >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn icon @click.stop="miniVariant = !miniVariant">
+      <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
         <v-icon>{{ miniVariant ? mdiChevronRight : mdiChevronLeft }}</v-icon>
       </v-btn>
       <v-btn icon @click.stop="clipped = !clipped">
@@ -34,7 +42,7 @@
       </v-btn>
       <v-btn icon @click.stop="fixed = !fixed">
         <v-icon>{{ mdiMinus }}</v-icon>
-      </v-btn>
+      </v-btn> -->
       <v-toolbar-title v-text="title" />
       <v-spacer />
       <v-btn icon @click.stop="signOut">
@@ -107,8 +115,13 @@ export default {
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Vuetify.js',
     }
+  },
+
+  computed: {
+    title() {
+      return this.$route.meta.title || 'Untitled'
+    },
   },
 
   methods: {

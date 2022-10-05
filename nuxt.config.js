@@ -49,6 +49,7 @@ export default {
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     'nuxt-client-init-module',
+    'nuxt-route-meta',
     // https://go.nuxtjs.dev/axios
     '@nuxtjs/axios',
   ],
@@ -66,16 +67,25 @@ export default {
       icons: 'mdiSvg',
     },
     theme: {
-      dark: true,
+      dark: false,
       themes: {
         dark: {
           primary: colors.blue.darken2,
-          accent: colors.grey.darken3,
           secondary: colors.amber.darken3,
+          accent: colors.grey.darken3,
+          error: colors.deepOrange.accent4,
           info: colors.teal.lighten1,
           warning: colors.amber.base,
-          error: colors.deepOrange.accent4,
           success: colors.green.accent3,
+        },
+        light: {
+          primary: colors.indigo.base,
+          secondary: colors.purple.base,
+          accent: colors.cyan.base,
+          error: colors.red.base,
+          warning: colors.orange.base,
+          info: colors.blue.base,
+          success: colors.green.base,
         },
       },
     },

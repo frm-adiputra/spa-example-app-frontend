@@ -92,6 +92,9 @@ import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'IndexPage',
+  meta: {
+    title: 'Home',
+  },
   computed: {
     ...mapGetters('mata-kuliahs', {
       findMataKuliahsInStore: 'find',
