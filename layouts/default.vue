@@ -37,6 +37,9 @@
       </v-btn>
       <v-toolbar-title v-text="title" />
       <v-spacer />
+      <v-btn icon @click.stop="signOut">
+        <v-icon>{{ mdiLogoutVariant }}</v-icon>
+      </v-btn>
       <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>{{ mdiMenu }}</v-icon>
       </v-btn>
@@ -72,6 +75,7 @@ import {
   mdiRepeat,
   mdiApps,
   mdiChartBubble,
+  mdiLogoutVariant,
 } from '@mdi/js'
 
 export default {
@@ -84,6 +88,7 @@ export default {
       mdiMinus,
       mdiMenu,
       mdiRepeat,
+      mdiLogoutVariant,
       clipped: false,
       drawer: false,
       fixed: false,
@@ -104,6 +109,14 @@ export default {
       rightDrawer: false,
       title: 'Vuetify.js',
     }
+  },
+
+  methods: {
+    async signOut() {
+      await this.$store.dispatch('auth/logout')
+      await localStorage.removeItem('feathers-jwt')
+      this.$router.go('/login')
+    },
   },
 }
 </script>
