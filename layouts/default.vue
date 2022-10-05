@@ -43,14 +43,24 @@
       <v-btn icon @click.stop="fixed = !fixed">
         <v-icon>{{ mdiMinus }}</v-icon>
       </v-btn> -->
-      <v-toolbar-title v-text="title" />
+      <v-spacer />
+      <v-text-field
+        filled
+        rounded
+        dense
+        hide-details
+        placeholder="Cari"
+        clearable
+        single-line
+      ></v-text-field>
+      <!-- <v-toolbar-title v-text="title" /> -->
       <v-spacer />
       <v-btn icon @click.stop="signOut">
         <v-icon>{{ mdiLogoutVariant }}</v-icon>
       </v-btn>
-      <v-btn icon @click.stop="rightDrawer = !rightDrawer">
+      <!-- <v-btn icon @click.stop="rightDrawer = !rightDrawer">
         <v-icon>{{ mdiMenu }}</v-icon>
-      </v-btn>
+      </v-btn> -->
     </v-app-bar>
     <v-main>
       <v-container>
@@ -67,9 +77,9 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-footer :absolute="!fixed" app>
+    <!-- <v-footer :absolute="!fixed" app>
       <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer>
+    </v-footer> -->
   </v-app>
 </template>
 
