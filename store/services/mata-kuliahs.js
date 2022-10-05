@@ -2,7 +2,7 @@
 import feathersClient, {
   makeServicePlugin,
   BaseModel,
-} from '~/plugins/feathers-client'
+} from '~/plugins/feathers'
 
 class MataKuliah extends BaseModel {
   constructor(data, options) {

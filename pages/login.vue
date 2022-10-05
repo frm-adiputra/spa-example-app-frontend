@@ -8,10 +8,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" href="http://localhost:3030/oauth/google">
-            Login
-          </v-btn>
-          <v-btn color="primary" @click="loginVuex"> Login via Vuex </v-btn>
+          <v-btn color="primary" :href="apiUrl"> Login </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -22,10 +19,10 @@
 export default {
   name: 'LoginPage',
 
-  methods: {
-    loginVuex() {
-      this.$store.dispatch('auth/authenticate', { strategy: 'google' })
-    },
+  data() {
+    return {
+      apiUrl: process.env.API_URL + '/oauth/google',
+    }
   },
 }
 </script>

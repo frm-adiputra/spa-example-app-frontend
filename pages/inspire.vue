@@ -15,7 +15,17 @@
 </template>
 
 <script>
+import feathersClient from '~/plugins/feathers'
+
 export default {
   name: 'InspirePage',
+  created() {
+    feathersClient
+      .service('mata-kuliahs')
+      .find()
+      .then((resp) => {
+        // console.log(resp)
+      })
+  },
 }
 </script>

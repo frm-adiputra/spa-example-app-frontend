@@ -11,7 +11,6 @@
           <v-btn color="primary" href="http://localhost:3030/oauth/google">
             Login
           </v-btn>
-          <v-btn color="primary" @click="loginVuex"> Login via Vuex </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -25,29 +24,7 @@ export default {
   name: 'AuthCallbackPage',
 
   mounted() {
-    // client.authentication
-    //   .getAccessToken()
-    //   .then((resp) => {
-    //     console.log('access_token', resp)
-    //   })
-    //   .catch((e) => {
-    //     console.error(e)
-    //   })
-    this.$store.dispatch('auth/authenticate')
-  },
-
-  methods: {
-    loginVuex() {
-      this.$store.dispatch('auth/authenticate', { strategy: 'google' })
-      // client
-      //   .reAuthenticate()
-      //   .then(() => {
-      //     console.log('reauthenticated')
-      //   })
-      //   .catch((e) => {
-      //     console.error(e)
-      //   })
-    },
+    // this.$store.dispatch('auth/authenticate')
   },
 }
 </script>
