@@ -92,64 +92,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
-import {
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiApplication,
-  mdiMinus,
-  mdiMenu,
-  mdiRepeat,
-  mdiAccount,
-} from '@mdi/js'
-
 export default {
-  name: 'DefaultLayout',
-  data: () => {
-    return {
-      mdiChevronLeft,
-      mdiChevronRight,
-      mdiApplication,
-      mdiMinus,
-      mdiMenu,
-      mdiRepeat,
-      mdiAccount,
-      clipped: false,
-      drawer: false,
-      fixed: false,
-      items: [
-        {
-          title: 'Welcome',
-          to: '/',
-        },
-        {
-          title: 'Inspire',
-          to: '/inspire',
-        },
-        {
-          title: 'Bentuk',
-          to: '/bentuk',
-        },
-      ],
-      miniVariant: false,
-      right: true,
-      rightDrawer: false,
-      menu: false,
-    }
-  },
-  computed: {
-    ...mapGetters('auth', {
-      user: 'user',
-    }),
-    title() {
-      return this.$route.meta.title || 'Untitled'
-    },
-    profilePicture() {
-      if (this.user) {
-        return this.user.profilePicture
-      }
-      return null
-    },
-  },
+  name: 'BlankCenterLayout',
 }
 </script>
