@@ -9,7 +9,16 @@ export default async function (context) {
       if (route.name === 'authcallback') {
         return redirect('/')
       }
-    } catch (e) {}
+    } catch (e) {
+      // eslint-disable-next-line
+      console.error(e)
+      // if (e.code === 404 && e.name === 'NotFound') {
+      await localStorage.removeItem('feathers-jwt')
+      await store.dispatch('auth/logout')
+      return redirect('/login')
+      // } else {
+      // }
+    }
   }
   if (!auth.publicPages.includes(route.name) && !auth.payload) {
     return redirect('/login')

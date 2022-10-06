@@ -35,8 +35,8 @@ export default feathersClient
 // Setting up feathers-vuex
 const { makeServicePlugin, makeAuthPlugin, BaseModel, models, FeathersVuex } =
   feathersVuex(feathersClient, {
-    serverAlias: 'api', // optional for working with multiple APIs (this is the default value)
-    idField: '_id', // Must match the id field in your database table/collection
+    // serverAlias: 'api', // optional for working with multiple APIs (this is the default value)
+    idField: 'id', // Must match the id field in your database table/collection
     whitelist: ['$regex', '$options'],
     enableEvents: process.client, // Prevent memory leak
   })
