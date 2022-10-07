@@ -18,12 +18,12 @@
           </v-list-item-group>
         </v-list>
       </v-card>
-      <v-dialog v-model="detailDialog" max-width="400">
-        <BentukDetail
-          :item-id="detailItemId"
-          @requestClose="detailDialog = false"
-        />
-      </v-dialog>
+      <BentukDetailDialog
+        v-model="detailDialog"
+        :item-id="detailItemId"
+        @requestEdit="editDialog = true"
+      />
+      <BentukEditDialog v-model="editDialog" :item-id="detailItemId" />
     </v-col>
   </v-row>
 </template>
@@ -38,6 +38,7 @@ export default {
   },
   data: () => ({
     detailDialog: false,
+    editDialog: false,
     detailItemId: null,
   }),
   computed: {

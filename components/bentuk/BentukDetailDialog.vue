@@ -11,7 +11,7 @@
       <v-card-text class="mt-5 ps-4">{{ item && item.bentuk }}</v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="warning" text @click="onModelUpdate(false)">
+        <v-btn color="warning" text @click="deleteDialog = true">
           <v-icon left>{{ icons.mdiDelete }}</v-icon> Hapus
         </v-btn>
         <v-btn color="info" text @click="requestEdit">
@@ -19,6 +19,7 @@
         </v-btn>
       </v-card-actions>
     </v-card>
+    <DeleteDialog v-model="deleteDialog" @requestDelete="onRequestDelete" />
   </v-dialog>
 </template>
 
@@ -38,6 +39,7 @@ export default {
       mdiDelete,
       mdiClose,
     },
+    deleteDialog: false,
   }),
   async fetch() {
     if (!this.itemId) {
@@ -61,9 +63,15 @@ export default {
   },
   methods: {
     ...mapActions('bentuk', { getItem: 'get' }),
+    ...mapActions('bentuk', { removeItem: 'remove' }),
     requestEdit() {
       this.onModelUpdate(false)
       this.$emit('requestEdit')
+    },
+    onRequestDelete() {
+      this.removeItem(this.itemId).then(() => {
+        this.onModelUpdate(false)
+      })
     },
     onModelUpdate(newVal) {
       this.$emit('input', newVal)

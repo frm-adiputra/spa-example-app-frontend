@@ -55,7 +55,12 @@ feathersClient.service(servicePath).hooks({
     create: [],
     update: [],
     patch: [],
-    remove: [],
+    remove: [
+      (err) => {
+        // eslint-disable-next-line
+        console.error(err)
+      },
+    ],
   },
 })
 
