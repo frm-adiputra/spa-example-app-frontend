@@ -77,7 +77,6 @@ export default {
           this.snackbar({
             message: `${err.message}`,
             timeout: 6000,
-            action: { label: 'Retry', dispatchId: 'bentuk/remove', payload: 1 },
           })
         })
     },
