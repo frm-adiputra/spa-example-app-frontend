@@ -52,7 +52,7 @@
       ></v-text-field>
       <!-- <v-toolbar-title v-text="title" /> -->
       <v-spacer />
-      <v-menu :close-on-content-click="false" offset-y>
+      <v-menu :close-on-content-click="true" offset-y>
         <template #activator="{ on, attrs }">
           <v-avatar v-bind="attrs" color="primary" size="32" v-on="on">
             <img
