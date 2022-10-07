@@ -2,10 +2,10 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6">
       <v-card>
-        <v-list>
-          <v-list-item-group>
+        <v-list flat>
+          <v-list-item-group active-class="">
             <template v-for="(item, index) in items">
-              <v-list-item :key="item.id" @click="showDetail(item.id)">
+              <v-list-item :key="item.id" @click.stop="showDetail(item.id)">
                 <v-list-item-content>
                   <v-list-item-title>{{ item.bentuk }}</v-list-item-title>
                 </v-list-item-content>
