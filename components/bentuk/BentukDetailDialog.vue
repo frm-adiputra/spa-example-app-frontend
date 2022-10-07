@@ -48,9 +48,7 @@ export default {
     await this.getItem(this.itemId)
   },
   computed: {
-    ...mapGetters('bentuk', {
-      getItemInStore: 'get',
-    }),
+    ...mapGetters('bentuk', { getItemInStore: 'get' }),
     item() {
       if (!this.itemId) {
         return null
@@ -64,14 +62,24 @@ export default {
   methods: {
     ...mapActions('bentuk', { getItem: 'get' }),
     ...mapActions('bentuk', { removeItem: 'remove' }),
+    ...mapActions('snackbar', { snackbar: 'queue' }),
+
     requestEdit() {
       this.onModelUpdate(false)
       this.$emit('requestEdit')
     },
     onRequestDelete() {
-      this.removeItem(this.itemId).then(() => {
-        this.onModelUpdate(false)
-      })
+      this.removeItem(this.itemId)
+        .then(() => {
+          this.onModelUpdate(false)
+        })
+        .catch((err) => {
+          this.snackbar({
+            message: `${err.message}`,
+            timeout: 6000,
+            action: { label: 'Retry', dispatchId: 'bentuk/remove', payload: 1 },
+          })
+        })
     },
     onModelUpdate(newVal) {
       this.$emit('input', newVal)
