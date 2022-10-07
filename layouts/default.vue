@@ -62,6 +62,7 @@
         <Nuxt />
       </v-container>
     </v-main>
+    <SnackBar />
   </v-app>
 </template>
 
