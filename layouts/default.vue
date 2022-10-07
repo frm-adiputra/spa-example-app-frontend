@@ -31,15 +31,6 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
-        <v-icon>{{ miniVariant ? mdiChevronRight : mdiChevronLeft }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="clipped = !clipped">
-        <v-icon>{{ mdiApplication }}</v-icon>
-      </v-btn>
-      <v-btn icon @click.stop="fixed = !fixed">
-        <v-icon>{{ mdiMinus }}</v-icon>
-      </v-btn> -->
       <v-spacer />
       <v-text-field
         filled
@@ -50,7 +41,6 @@
         clearable
         single-line
       ></v-text-field>
-      <!-- <v-toolbar-title v-text="title" /> -->
       <v-spacer />
       <v-menu :close-on-content-click="true" offset-y>
         <template #activator="{ on, attrs }">
@@ -66,53 +56,24 @@
         </template>
         <AccountMenu />
       </v-menu>
-      <!-- <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-        <v-icon>{{ mdiMenu }}</v-icon>
-      </v-btn> -->
     </v-app-bar>
     <v-main>
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-    <v-navigation-drawer v-model="rightDrawer" :right="right" temporary fixed>
-      <v-list>
-        <v-list-item @click.native="right = !right">
-          <v-list-item-action>
-            <v-icon light> {{ mdiRepeat }} </v-icon>
-          </v-list-item-action>
-          <v-list-item-title>Switch drawer (click me)</v-list-item-title>
-        </v-list-item>
-      </v-list>
-    </v-navigation-drawer>
-    <!-- <v-footer :absolute="!fixed" app>
-      <span>&copy; {{ new Date().getFullYear() }}</span>
-    </v-footer> -->
   </v-app>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
-import {
-  mdiChevronLeft,
-  mdiChevronRight,
-  mdiApplication,
-  mdiMinus,
-  mdiMenu,
-  mdiRepeat,
-  mdiAccount,
-} from '@mdi/js'
+import { mdiMenu, mdiAccount } from '@mdi/js'
 
 export default {
   name: 'DefaultLayout',
   data: () => {
     return {
-      mdiChevronLeft,
-      mdiChevronRight,
-      mdiApplication,
-      mdiMinus,
       mdiMenu,
-      mdiRepeat,
       mdiAccount,
       clipped: false,
       drawer: false,
