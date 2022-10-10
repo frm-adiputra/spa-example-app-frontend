@@ -9,7 +9,7 @@
         </v-btn>
       </v-app-bar>
       <v-card-text class="mt-5 ps-4">
-        <v-form v-model="valid" ref="form">
+        <v-form ref="form" v-model="valid">
           <v-text-field
             v-model="bentuk"
             label="Bentuk"
@@ -19,7 +19,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
-        <v-btn color="info" text @click="save" :disabled="!valid">Simpan</v-btn>
+        <v-btn color="info" text :disabled="!valid" @click="save">Simpan</v-btn>
         <v-btn text @click="onModelUpdate(false)">Batal</v-btn>
       </v-card-actions>
     </v-card>
@@ -92,6 +92,7 @@ export default {
           this.onModelUpdate(false)
         })
         .catch((err) => {
+          // eslint-disable-next-line
           console.error(err)
         })
     },
