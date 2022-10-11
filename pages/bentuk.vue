@@ -24,22 +24,38 @@
         @requestEdit="editDialog = true"
       />
       <BentukEditDialog v-model="editDialog" :item-id="detailItemId" />
+      <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
     </v-col>
   </v-row>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import InfiniteLoading from 'vue-infinite-loading'
 
 export default {
   name: 'BentukPage',
+  components: {
+    InfiniteLoading,
+  },
   meta: {
     title: 'Bentuk',
+  },
+  async fetch() {
+    const result = await this.findItems({
+      query: { $limit: this.limit, $skip: this.skip },
+    })
+    this.skip = result.skip
+    this.itemCount = result.total
   },
   data: () => ({
     detailDialog: false,
     editDialog: false,
     detailItemId: null,
+    limit: 20,
+    skip: 0,
+    itemCount: 0,
+    infiniteId: +new Date(),
   }),
   computed: {
     ...mapGetters('bentuk', {
@@ -55,15 +71,23 @@ export default {
       return this.getItem(this.currentItem)
     },
   },
-  created() {
-    this.findItems()
-  },
   methods: {
     ...mapActions('bentuk', { findItems: 'find' }),
     ...mapActions('bentuk', { getItem: 'get' }),
     showDetail(itemId) {
       this.detailItemId = itemId
       this.detailDialog = true
+    },
+    infiniteHandler($state) {
+      console.log('SCROLLLL')
+      this.skip = this.skip + this.limit
+      this.$fetch().then(() => {
+        if (this.itemCount === this.items.length) {
+          $state.complete()
+        } else {
+          $state.loaded()
+        }
+      })
     },
   },
 }
