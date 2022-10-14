@@ -68,11 +68,17 @@ export default {
     mdiPlus,
   }),
   async fetch() {
-    const result = await this.findItems({
-      query: { $limit: this.limit, $skip: this.skip },
-    })
-    this.skip = result.skip
-    this.itemCount = result.total
+    try {
+      const result = await this.findItems({
+        query: { $limit: this.limit, $skip: this.skip },
+      })
+      this.skip = result.skip
+      this.itemCount = result.total
+    } catch (err) {
+      this.$store.dispatch('snackbar/queue', {
+        message: err.message || err,
+      })
+    }
   },
   computed: {
     ...mapGetters('bentuk', {
