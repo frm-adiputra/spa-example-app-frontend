@@ -27,7 +27,7 @@
 </template>
 
 <script>
-/* eslint-disable no-template-curly-in-string */
+/* eslint-disable no-template-curly-in-string, no-console */
 
 import { mapActions } from 'vuex'
 import { mdiClose } from '@mdi/js'
@@ -67,11 +67,15 @@ export default {
     ],
   }),
   async fetch() {
-    if (!this.itemId) {
-      return null
+    try {
+      if (!this.itemId) {
+        return null
+      }
+      const item = await this.getItem(this.itemId)
+      this.bentuk = item.bentuk
+    } catch (err) {
+      this.$store.dispatch('snackbar/queue', { message: err.message || err })
     }
-    const item = await this.getItem(this.itemId)
-    this.bentuk = item.bentuk
   },
   watch: {
     value(val) {
@@ -87,13 +91,14 @@ export default {
       this.$emit('input', newVal)
     },
     save() {
-      this.updateItem([this.itemId, { bentuk: this.bentuk }, {}])
+      this.updateItem([this.itemId, { bentuk: this.bentuk.trim() }, {}])
         .then(() => {
           this.onModelUpdate(false)
         })
         .catch((err) => {
-          // eslint-disable-next-line
-          console.error(err)
+          this.$store.dispatch('snackbar/queue', {
+            message: err.message || err,
+          })
         })
     },
   },
