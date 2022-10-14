@@ -2,7 +2,6 @@
 export default async function (context) {
   const { store, redirect, route } = context
   const { auth } = store.state
-  // const { store } = context
   if (route.name !== 'login') {
     try {
       await store.dispatch('auth/authenticate')
@@ -11,13 +10,9 @@ export default async function (context) {
       }
     } catch (e) {
       // eslint-disable-next-line
-      console.error(e)
-      // if (e.code === 404 && e.name === 'NotFound') {
-      await localStorage.removeItem('feathers-jwt')
-      await store.dispatch('auth/logout')
+      // console.error(e)
+      // store.dispatch('auth/logout').catch(() => {})
       return redirect('/login')
-      // } else {
-      // }
     }
   }
   if (!auth.publicPages.includes(route.name) && !auth.payload) {

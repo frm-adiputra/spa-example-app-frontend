@@ -26,6 +26,7 @@
     <v-divider></v-divider>
 
     <v-card-actions>
+      <p>{{ roles }}</p>
       <v-spacer></v-spacer>
       <v-btn color="primary" text @click="signOut">
         <v-icon left>{{ mdiLogoutVariant }}</v-icon> Sign out
@@ -35,7 +36,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import { mdiLogoutVariant } from '@mdi/js'
 
 export default {
@@ -47,17 +48,38 @@ export default {
     ...mapGetters('auth', {
       user: 'user',
     }),
+    ...mapGetters('user-roles', {
+      findRolesInStore: 'find',
+    }),
     profilePicture() {
       if (this.user) {
         return this.user.profilePicture
       }
       return null
     },
+    roles() {
+      if (this.user) {
+        return this.findRolesInStore({ query: { email: this.user.email } })
+      }
+      return null
+    },
+  },
+  watch: {
+    user(val) {
+      if (val) {
+        this.findRoles({ query: { email: this.user.email } })
+      }
+    },
   },
   methods: {
+    ...mapActions('user-roles', { findRoles: 'find' }),
     async signOut() {
-      await this.$store.dispatch('auth/logout')
-      await localStorage.removeItem('feathers-jwt')
+      try {
+        await this.$store.dispatch('auth/logout')
+      } catch (err) {
+        // eslint-disable-next-line
+        // console.error(err)
+      }
       this.$router.go('/login')
     },
   },
