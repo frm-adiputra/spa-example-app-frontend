@@ -11,7 +11,7 @@ export default async function (context) {
     } catch (e) {
       // eslint-disable-next-line
       // console.error(e)
-      // store.dispatch('auth/logout').catch(() => {})
+      await localStorage.removeItem('feathers-jwt')
       return redirect('/login')
     }
   }
