@@ -32,17 +32,7 @@
 import { mapActions } from 'vuex'
 import { mdiClose } from '@mdi/js'
 import { string } from 'yup'
-
-function yupRules(r) {
-  return (v) => {
-    try {
-      r.validateSync(v)
-      return true
-    } catch (err) {
-      return err.errors[0]
-    }
-  }
-}
+import { yupRules } from '~/plugins/misc'
 
 export default {
   name: 'BentukEdit',
@@ -55,7 +45,7 @@ export default {
       mdiClose,
     },
     valid: false,
-    bentuk: null,
+    bentuk: '',
     bentukRules: [
       yupRules(
         string()
@@ -91,6 +81,10 @@ export default {
       this.$emit('input', newVal)
     },
     save() {
+      if (!this.valid) {
+        return
+      }
+
       this.updateItem([this.itemId, { bentuk: this.bentuk.trim() }, {}])
         .then(() => {
           this.onModelUpdate(false)
