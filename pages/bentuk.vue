@@ -1,6 +1,6 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
+    <v-col cols="12" sm="8" md="6" class="pb-13">
       <v-card>
         <v-list flat>
           <v-list-item-group active-class="">
@@ -23,15 +23,30 @@
         :item-id="detailItemId"
         @requestEdit="editDialog = true"
       />
+      <BentukCreateDialog v-model="createDialog" />
       <BentukEditDialog v-model="editDialog" :item-id="detailItemId" />
       <InfiniteLoading @infinite="infiniteHandler"></InfiniteLoading>
     </v-col>
+    <v-fab-transition>
+      <v-btn
+        color="accent"
+        fab
+        dark
+        bottom
+        right
+        fixed
+        @click="createDialog = true"
+      >
+        <v-icon>{{ mdiPlus }}</v-icon>
+      </v-btn>
+    </v-fab-transition>
   </v-row>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
+import { mdiPlus } from '@mdi/js'
 
 export default {
   name: 'BentukPage',
@@ -41,6 +56,17 @@ export default {
   meta: {
     title: 'Bentuk',
   },
+  data: () => ({
+    detailDialog: false,
+    createDialog: false,
+    editDialog: false,
+    detailItemId: null,
+    limit: 20,
+    skip: 0,
+    itemCount: 0,
+    infiniteId: +new Date(),
+    mdiPlus,
+  }),
   async fetch() {
     const result = await this.findItems({
       query: { $limit: this.limit, $skip: this.skip },
@@ -48,15 +74,6 @@ export default {
     this.skip = result.skip
     this.itemCount = result.total
   },
-  data: () => ({
-    detailDialog: false,
-    editDialog: false,
-    detailItemId: null,
-    limit: 20,
-    skip: 0,
-    itemCount: 0,
-    infiniteId: +new Date(),
-  }),
   computed: {
     ...mapGetters('bentuk', {
       findItemsInStore: 'find',
@@ -79,7 +96,6 @@ export default {
       this.detailDialog = true
     },
     infiniteHandler($state) {
-      console.log('SCROLLLL')
       this.skip = this.skip + this.limit
       this.$fetch().then(() => {
         if (this.itemCount === this.items.length) {
