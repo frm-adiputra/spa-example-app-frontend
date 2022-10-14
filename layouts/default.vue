@@ -42,7 +42,14 @@
         single-line
       ></v-text-field>
       <v-spacer />
-      <v-menu :close-on-content-click="true" offset-y>
+      <v-menu
+        :close-on-content-click="true"
+        offset-y
+        bottom
+        left
+        min-width="360"
+        max-width="360"
+      >
         <template #activator="{ on, attrs }">
           <v-avatar v-bind="attrs" color="primary" size="32" v-on="on">
             <img
