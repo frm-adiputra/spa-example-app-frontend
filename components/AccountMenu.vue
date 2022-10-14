@@ -12,7 +12,9 @@
 
         <v-list-item-content>
           <v-list-item-title>{{ user && user.name }}</v-list-item-title>
-          <v-list-item-subtitle>Roles</v-list-item-subtitle>
+          <v-list-item-subtitle>{{
+            roleNames.join(', ')
+          }}</v-list-item-subtitle>
         </v-list-item-content>
 
         <v-list-item-action>
@@ -26,7 +28,6 @@
     <v-divider></v-divider>
 
     <v-card-actions>
-      <p>{{ roles }}</p>
       <v-spacer></v-spacer>
       <v-btn color="primary" text @click="signOut">
         <v-icon left>{{ mdiLogoutVariant }}</v-icon> Sign out
@@ -44,6 +45,12 @@ export default {
   data: () => ({
     mdiLogoutVariant,
   }),
+  async fetch() {
+    if (!this.user) {
+      return
+    }
+    await this.findRoles({ query: { email: this.user.email } })
+  },
   computed: {
     ...mapGetters('auth', {
       user: 'user',
@@ -59,17 +66,39 @@ export default {
     },
     roles() {
       if (this.user) {
-        return this.findRolesInStore({ query: { email: this.user.email } })
+        return this.findRolesInStore({
+          query: { email: this.user.email },
+        }).data.map(({ role }) => role)
       }
       return null
     },
+    roleNames() {
+      if (!this.roles) {
+        return []
+      }
+
+      return this.roles.map((x) => {
+        switch (x) {
+          case 'ADMIN_UNIV':
+            return 'Admin Universitas'
+          case 'ADMIN_FAKULTAS':
+            return 'Admin Fakultas'
+          case 'ADMIN_PRODI':
+            return 'Admin Prodi'
+          case 'MANAJER_UNIV':
+            return 'Manajer Universitas'
+          case 'MANAJER_FAKULTAS':
+            return 'Manajer Fakultas'
+          case 'MANAJER_PRODI':
+            return 'Manajer Prodi'
+          default:
+            return 'Unauthorized'
+        }
+      })
+    },
   },
   watch: {
-    user(val) {
-      if (val) {
-        this.findRoles({ query: { email: this.user.email } })
-      }
-    },
+    user: '$fetch',
   },
   methods: {
     ...mapActions('user-roles', { findRoles: 'find' }),
