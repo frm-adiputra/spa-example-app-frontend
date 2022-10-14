@@ -18,6 +18,7 @@
 <script>
 export default {
   name: 'LoginPage',
+  layout: 'blankCenter',
   data: () => {
     return {
       apiUrl: process.env.API_URL + '/oauth/google',
