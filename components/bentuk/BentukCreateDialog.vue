@@ -59,7 +59,8 @@ export default {
     value(val) {
       if (val) {
         if (this.$refs.form) {
-          this.$refs.form.reset()
+          this.bentuk = ''
+          this.$refs.form.resetValidation()
         }
       }
     },
