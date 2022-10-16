@@ -15,20 +15,10 @@
 </template>
 
 <script>
-import feathersClient from '~/plugins/feathers'
-
 export default {
   name: 'InspirePage',
   meta: {
     title: 'Inspire',
-  },
-  created() {
-    feathersClient
-      .service('mata-kuliahs')
-      .find()
-      .then((resp) => {
-        // console.log(resp)
-      })
   },
 }
 </script>
