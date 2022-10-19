@@ -99,6 +99,10 @@ export default {
           title: 'Bentuk',
           to: '/bentuk',
         },
+        {
+          title: 'Uploads',
+          to: '/uploads',
+        },
       ],
       miniVariant: false,
       right: true,
