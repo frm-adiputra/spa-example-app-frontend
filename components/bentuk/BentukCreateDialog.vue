@@ -11,16 +11,19 @@
       <v-card-text class="mt-5 ps-4">
         <v-form ref="form" v-model="valid">
           <v-text-field
+            ref="bentuk"
             v-model="bentuk"
             label="Bentuk"
             :rules="bentukRules"
           ></v-text-field>
           <v-file-input
+            ref="dokumen"
             v-model="dokumenFile"
             show-size
             label="Dokumen"
             :loading="dokumenUploadLoading"
             @change="onDokumenChange"
+            :rules="dokumenFileRules"
           ></v-file-input>
         </v-form>
       </v-card-text>
@@ -60,10 +63,17 @@ export default {
             .max(7, 'Maksimal ${max} karakter')
             .min(1, 'Minimal ${min} karakter')
         ),
+        () => this.bentukError.pop() || true,
       ],
+      bentukError: [],
+      dokumenError: [],
       dokumenFile: null,
       dokumenUploadLoading: false,
       dokumen: null,
+      dokumenFileRules: [
+        (v) => !v || v.size < 1000000 || 'Maksimum file size is ??',
+        () => this.dokumenError.pop() || true,
+      ],
     }
   },
   watch: {
@@ -94,12 +104,23 @@ export default {
           this.onModelUpdate(false)
         })
         .catch((err) => {
+          if (err.className && err.className === 'bad-request') {
+            this.bentukError = [err.errors.bentuk]
+            this.dokumenError = [err.errors.dokumen]
+            this.$refs.form.validate()
+          }
+
           this.$store.dispatch('snackbar/queue', {
             message: err.message || err,
           })
         })
     },
     async onDokumenChange() {
+      if (!this.dokumenFile || !this.$refs.dokumen.validate()) {
+        this.dokumen = null
+        return
+      }
+
       const result = await this.$utils.uploadFile(
         this.dokumenFile,
         (loading) => (this.dokumenUploadLoading = loading)
