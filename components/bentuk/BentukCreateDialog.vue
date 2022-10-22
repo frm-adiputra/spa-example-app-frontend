@@ -15,6 +15,13 @@
             label="Bentuk"
             :rules="bentukRules"
           ></v-text-field>
+          <v-file-input
+            v-model="dokumenFile"
+            show-size
+            label="Dokumen"
+            :loading="dokumenUploadLoading"
+            @change="onDokumenChange"
+          ></v-file-input>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -32,34 +39,41 @@
 import { mapActions } from 'vuex'
 import { mdiClose } from '@mdi/js'
 import { string } from 'yup'
-import { yupRules } from '~/plugins/misc'
 
 export default {
   name: 'BentukCreate',
   props: {
     value: { type: Boolean, default: false },
   },
-  data: () => ({
-    icons: {
-      mdiClose,
-    },
-    valid: false,
-    bentuk: '',
-    bentukRules: [
-      yupRules(
-        string()
-          .trim()
-          .required('Harus ngisi broo')
-          .max(7, 'Maksimal ${max} karakter')
-          .min(1, 'Minimal ${min} karakter')
-      ),
-    ],
-  }),
+  data() {
+    return {
+      icons: {
+        mdiClose,
+      },
+      valid: false,
+      bentuk: '',
+      bentukRules: [
+        this.$utils.yupRules(
+          string()
+            .trim()
+            .required('Harus ngisi broo')
+            .max(7, 'Maksimal ${max} karakter')
+            .min(1, 'Minimal ${min} karakter')
+        ),
+      ],
+      dokumenFile: null,
+      dokumenUploadLoading: false,
+      dokumen: null,
+    }
+  },
   watch: {
     value(val) {
       if (val) {
         if (this.$refs.form) {
           this.bentuk = ''
+          this.dokumen = null
+          this.dokumenFile = null
+          this.dokumenUploadLoading = false
           this.$refs.form.resetValidation()
         }
       }
@@ -75,7 +89,7 @@ export default {
         return
       }
 
-      this.createItem({ bentuk: this.bentuk.trim() })
+      this.createItem({ bentuk: this.bentuk.trim(), dokumen: this.dokumen })
         .then(() => {
           this.onModelUpdate(false)
         })
@@ -84,6 +98,13 @@ export default {
             message: err.message || err,
           })
         })
+    },
+    async onDokumenChange() {
+      const result = await this.$utils.uploadFile(
+        this.dokumenFile,
+        (loading) => (this.dokumenUploadLoading = loading)
+      )
+      this.dokumen = result.id
     },
   },
 }

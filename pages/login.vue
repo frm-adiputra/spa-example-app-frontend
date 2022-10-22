@@ -8,7 +8,7 @@
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn color="primary" :href="apiUrl"> Login </v-btn>
+          <v-btn color="primary" :href="loginURL"> Login </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -19,10 +19,10 @@
 export default {
   name: 'LoginPage',
   layout: 'blankCenter',
-  data: () => {
-    return {
-      apiUrl: process.env.API_URL + '/oauth/google',
-    }
+  computed: {
+    loginURL() {
+      return `${this.$config.apiURL}/oauth/google`
+    },
   },
 }
 </script>

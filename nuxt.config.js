@@ -3,7 +3,13 @@ import colors from 'vuetify/es5/util/colors'
 export default {
   env: {
     API_URL: process.env.API_URL || 'http://localhost:3030',
+    FILES_BASE_URL: process.env.FILES_BASE_URL || 'http://localhost:3030/files',
   },
+  publicRuntimeConfig: {
+    apiURL: process.env.API_URL || 'http://localhost:3030',
+    filesBaseURL: process.env.FILES_BASE_URL || 'http://localhost:3030/files',
+  },
+  privateRuntimeConfig: {},
 
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
@@ -31,7 +37,7 @@ export default {
   css: [],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-  plugins: [{ src: '~/plugins/feathers-vuex.js' }],
+  plugins: ['~/plugins/feathers-vuex.js', '~/plugins/utils.js'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,

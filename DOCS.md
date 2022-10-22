@@ -1,10 +1,8 @@
 # App Documentations
 
-## Events Name Conventions
+## Uploads
 
-- data-create: event fired to create data
-- data-update: event fired to update data
-- data-remove: event fired to delete data
+Semua upload diarahkan ke endpoint `<backend>/uploads`
 
 ## Snackbar
 

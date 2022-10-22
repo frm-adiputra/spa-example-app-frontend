@@ -8,7 +8,29 @@
           <v-icon>{{ icons.mdiClose }}</v-icon>
         </v-btn>
       </v-app-bar>
-      <v-card-text class="mt-5 ps-4">{{ item && item.bentuk }}</v-card-text>
+      <v-list two-line>
+        <v-list-item>
+          <v-list-item-content>
+            <v-list-item-title>{{ item && item.bentuk }}</v-list-item-title>
+            <v-list-item-subtitle>Bentuk</v-list-item-subtitle>
+          </v-list-item-content>
+        </v-list-item>
+        <v-list-item :href="dokumenLink">
+          <v-list-item-content>
+            <v-list-item-title>{{
+              dokumenLink ? 'Dokumen' : 'Tidak ada'
+            }}</v-list-item-title>
+            <v-list-item-subtitle>{{
+              dokumenLink ? 'Unduh' : 'Dokumen'
+            }}</v-list-item-subtitle>
+          </v-list-item-content>
+          <v-list-item-action v-if="dokumenLink">
+            <v-btn icon>
+              <v-icon>{{ icons.mdiDownload }}</v-icon>
+            </v-btn>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="warning" text @click="deleteDialog = true">
@@ -25,7 +47,7 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import { mdiPencil, mdiDelete, mdiClose } from '@mdi/js'
+import { mdiPencil, mdiDelete, mdiClose, mdiDownload } from '@mdi/js'
 
 export default {
   name: 'BentukDetailDialog',
@@ -38,6 +60,7 @@ export default {
       mdiPencil,
       mdiDelete,
       mdiClose,
+      mdiDownload,
     },
     deleteDialog: false,
   }),
@@ -54,6 +77,13 @@ export default {
         return null
       }
       return this.getItemInStore(this.itemId)
+    },
+    dokumenLink() {
+      if (!this.item || !this.item.dokumen) {
+        return null
+      }
+
+      return `${this.$config.filesBaseURL}/${this.item.dokumen}`
     },
   },
   watch: {

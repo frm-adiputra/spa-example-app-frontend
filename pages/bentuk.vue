@@ -2,7 +2,7 @@
   <v-row justify="center" align="center">
     <v-col cols="12" sm="8" md="6" class="pb-13">
       <v-card>
-        <v-list flat>
+        <v-list v-if="items.length > 0" flat>
           <v-list-item-group active-class="">
             <template v-for="(item, index) in items">
               <v-list-item :key="item.id" @click.stop="showDetail(item.id)">
@@ -47,6 +47,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import InfiniteLoading from 'vue-infinite-loading'
 import { mdiPlus } from '@mdi/js'
+import orderBy from 'lodash/orderBy'
 
 export default {
   name: 'BentukPage',
@@ -85,7 +86,7 @@ export default {
       findItemsInStore: 'find',
     }),
     items() {
-      return this.findItemsInStore({}).data
+      return orderBy(this.findItemsInStore({}).data, ['updatedAt'], ['desc'])
     },
     itemDetail() {
       if (!this.currentItem) {

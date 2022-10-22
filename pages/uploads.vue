@@ -6,6 +6,8 @@
           v-model="fileupload"
           show-size
           label="File input"
+          :loading="uploadLoading"
+          @change="onUploadChange"
         ></v-file-input>
         <v-btn @click="doUpload">Upload</v-btn>
         <v-btn @click="doDownload">Download</v-btn>
@@ -76,6 +78,7 @@ export default {
     mdiPlus,
     myFiles: [],
     fileupload: null,
+    uploadLoading: false,
   }),
   async fetch() {
     try {
@@ -111,17 +114,16 @@ export default {
       this.detailItemId = itemId
       this.detailDialog = true
     },
+    async onUploadChange() {
+      // eslint-disable-next-line
+      await console.log('changed', this.fileupload)
+    },
     async doUpload() {
-      const formData = new FormData()
-      formData.append('uri', this.fileupload)
-      const response = await fetch('http://localhost:3030/uploads', {
-        method: 'POST',
-        body: formData,
-        headers: {
-          Authorization: 'Bearer ' + localStorage.getItem('feathers-jwt'),
-        },
-      })
-      const result = await response.json()
+      const result = await this.$utils.uploadFile(
+        this.fileupload,
+        (loading) => (this.uploadLoading = loading)
+      )
+      // eslint-disable-next-line
       console.log(result)
       alert('The file has been uploaded successfully.')
     },
@@ -133,7 +135,7 @@ export default {
           'c5f013ab41a89c4f7369c046a169d5a98fa451e4314e9699f8fdac6c36b67902.xlsx'
         )
         .then((resp) => {
-          console.log(resp)
+          // console.log(resp)
         })
     },
     infiniteHandler($state) {

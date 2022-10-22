@@ -15,6 +15,12 @@
             label="Bentuk"
             :rules="bentukRules"
           ></v-text-field>
+          <v-file-input
+            v-model="dokumenFile"
+            label="Dokumen"
+            :loading="dokumenUploadLoading"
+            @change="onDokumenChange"
+          ></v-file-input>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -32,7 +38,6 @@
 import { mapActions } from 'vuex'
 import { mdiClose } from '@mdi/js'
 import { string } from 'yup'
-import { yupRules } from '~/plugins/misc'
 
 export default {
   name: 'BentukEdit',
@@ -40,22 +45,30 @@ export default {
     itemId: { type: String, default: null },
     value: { type: Boolean, default: false },
   },
-  data: () => ({
-    icons: {
-      mdiClose,
-    },
-    valid: false,
-    bentuk: '',
-    bentukRules: [
-      yupRules(
-        string()
-          .trim()
-          .required('Harus ngisi broo')
-          .max(7, 'Maksimal ${max} karakter')
-          .min(1, 'Minimal ${min} karakter')
-      ),
-    ],
-  }),
+  data() {
+    return {
+      icons: {
+        mdiClose,
+      },
+      valid: false,
+      bentuk: '',
+      bentukRules: [
+        this.$utils.yupRules(
+          string()
+            .trim()
+            .required('Harus ngisi broo')
+            .max(7, 'Maksimal ${max} karakter')
+            .min(1, 'Minimal ${min} karakter')
+        ),
+      ],
+      dokumenFile: new File(['foo'], 'foo.txt', {
+        type: 'text/plain',
+      }),
+      dokumenUploadLoading: false,
+      dokumen: null,
+      uploadsItem: null,
+    }
+  },
   async fetch() {
     try {
       if (!this.itemId) {
@@ -63,6 +76,17 @@ export default {
       }
       const item = await this.getItem(this.itemId)
       this.bentuk = item.bentuk
+      this.dokumen = item.dokumen
+      if (this.dokumen) {
+        const uploadsItem = await this.getUploadsItem(this.dokumen)
+        const extension = this.dokumen.split('.').pop()
+        this.dokumenFile = new File([''], `Dokumen.${extension}`, {
+          type: uploadsItem.contentType,
+        })
+      } else {
+        this.dokumenFile = null
+      }
+      // console.log(uploadsItem.contentType, uploadsItem.id, uploadsItem.size)
     } catch (err) {
       this.$store.dispatch('snackbar/queue', { message: err.message || err })
     }
@@ -77,6 +101,7 @@ export default {
   methods: {
     ...mapActions('bentuk', { getItem: 'get' }),
     ...mapActions('bentuk', { updateItem: 'update' }),
+    ...mapActions('uploads', { getUploadsItem: 'get' }),
     onModelUpdate(newVal) {
       this.$emit('input', newVal)
     },
@@ -85,7 +110,11 @@ export default {
         return
       }
 
-      this.updateItem([this.itemId, { bentuk: this.bentuk.trim() }, {}])
+      this.updateItem([
+        this.itemId,
+        { bentuk: this.bentuk.trim(), dokumen: this.dokumen },
+        {},
+      ])
         .then(() => {
           this.onModelUpdate(false)
         })
@@ -94,6 +123,17 @@ export default {
             message: err.message || err,
           })
         })
+    },
+    async onDokumenChange() {
+      if (!this.dokumenFile) {
+        this.dokumen = null
+        return
+      }
+      const result = await this.$utils.uploadFile(
+        this.dokumenFile,
+        (loading) => (this.dokumenUploadLoading = loading)
+      )
+      this.dokumen = result.id
     },
   },
 }
