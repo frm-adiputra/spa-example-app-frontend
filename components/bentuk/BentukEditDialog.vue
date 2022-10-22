@@ -16,10 +16,12 @@
             :rules="bentukRules"
           ></v-text-field>
           <v-file-input
+            ref="dokumen"
             v-model="dokumenFile"
             label="Dokumen"
             :loading="dokumenUploadLoading"
             @change="onDokumenChange"
+            :rules="dokumenFileRules"
           ></v-file-input>
         </v-form>
       </v-card-text>
@@ -60,13 +62,20 @@ export default {
             .max(7, 'Maksimal ${max} karakter')
             .min(1, 'Minimal ${min} karakter')
         ),
+        () => this.bentukError.pop() || true,
       ],
+      bentukError: [],
+      dokumenError: [],
       dokumenFile: new File(['foo'], 'foo.txt', {
         type: 'text/plain',
       }),
       dokumenUploadLoading: false,
       dokumen: null,
       uploadsItem: null,
+      dokumenFileRules: [
+        (v) => !v || v.size < 1000000 || 'Maksimum file size is 1 MB',
+        () => this.dokumenError.pop() || true,
+      ],
     }
   },
   async fetch() {
@@ -105,35 +114,45 @@ export default {
     onModelUpdate(newVal) {
       this.$emit('input', newVal)
     },
-    save() {
+    async save() {
       if (!this.valid) {
         return
       }
-
-      this.updateItem([
-        this.itemId,
-        { bentuk: this.bentuk.trim(), dokumen: this.dokumen },
-        {},
-      ])
-        .then(() => {
-          this.onModelUpdate(false)
+      try {
+        await this.updateItem([
+          this.itemId,
+          { bentuk: this.bentuk.trim(), dokumen: this.dokumen },
+          {},
+        ])
+        this.onModelUpdate(false)
+      } catch (err) {
+        if (err.className && err.className === 'bad-request') {
+          this.bentukError = [err.errors.bentuk]
+          this.dokumenError = [err.errors.dokumen]
+          this.$refs.form.validate()
+        }
+        await this.$store.dispatch('snackbar/queue', {
+          message: err.message || err,
         })
-        .catch((err) => {
-          this.$store.dispatch('snackbar/queue', {
-            message: err.message || err,
-          })
-        })
+      }
     },
     async onDokumenChange() {
-      if (!this.dokumenFile) {
+      if (!this.dokumenFile || !this.$refs.dokumen.validate()) {
         this.dokumen = null
         return
       }
-      const result = await this.$utils.uploadFile(
-        this.dokumenFile,
-        (loading) => (this.dokumenUploadLoading = loading)
-      )
-      this.dokumen = result.id
+
+      try {
+        const result = await this.$utils.uploadFile(
+          this.dokumenFile,
+          (loading) => (this.dokumenUploadLoading = loading)
+        )
+        this.dokumen = result.id
+      } catch (err) {
+        await this.$store.dispatch('snackbar/queue', {
+          message: err.message || err,
+        })
+      }
     },
   },
 }

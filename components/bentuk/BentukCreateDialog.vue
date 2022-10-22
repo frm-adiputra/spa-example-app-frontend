@@ -71,7 +71,7 @@ export default {
       dokumenUploadLoading: false,
       dokumen: null,
       dokumenFileRules: [
-        (v) => !v || v.size < 1000000 || 'Maksimum file size is ??',
+        (v) => !v || v.size < 1000000 || 'Maksimum file size is 1 MB',
         () => this.dokumenError.pop() || true,
       ],
     }
